@@ -1,0 +1,57 @@
+@startuml
+title Pet Adoption Platform - Sequence Diagrams
+
+actor User
+actor Shelter
+actor Administrator as Admin
+
+participant "Pet Adoption Platform" as System
+participant "Map Service" as Map
+participant "Notification Service" as Notify
+
+== View Animal Posts ==
+User -> System: View animal posts
+System --> User: Display active posts list
+
+== View Nearby Animals ==
+User -> System: View nearby animals (location permission)
+alt Permission granted
+  System -> Map: Get/Validate user location (lat, lon)
+  Map --> System: Location confirmed
+  System --> User: Show nearby animals (filtered by distance)
+else Permission denied
+  System --> User: Show error (Location permission required)
+end
+
+== Send Adoption Request ==
+User -> System: Select post + Send adoption request (message)
+System -> System: Save request (status = Pending)
+System -> Notify: Notify Shelter about new request
+Notify --> System: Notification sent
+System --> User: Request created (Pending)
+
+== Shelter Reviews Requests ==
+Shelter -> System: View adoption requests
+System --> Shelter: Display requests list (Pending/Approved/Rejected)
+
+== Approve / Reject Request ==
+Shelter -> System: Approve/Reject request
+alt Approved
+  System -> System: Update status = Approved
+  System -> Notify: Notify User (Approved)
+  Notify --> System: Notification sent
+  System --> Shelter: Success message
+else Rejected
+  System -> System: Update status = Rejected
+  System -> Notify: Notify User (Rejected)
+  Notify --> System: Notification sent
+  System --> Shelter: Success message
+end
+
+== Admin Moderation (Optional) ==
+Admin -> System: Review reported posts/users
+System --> Admin: Show moderation panel
+Admin -> System: Disable post / Ban user
+System --> Admin: Moderation action saved
+
+@enduml
