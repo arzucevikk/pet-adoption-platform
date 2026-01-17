@@ -1,0 +1,205 @@
+Pet Adoption Platform – Complete System Documentation
+1. INTRODUCTION
+This document provides a complete description of the Pet Adoption Platform.
+
+The main objective of the system is to help users find adoptable pets near their location
+
+and complete the adoption process in a secure and structured manner.
+
+2. ACTORS
+User: Searches pets, views nearby animals, and submits adoption requests.
+
+Shelter: Creates animal posts and manages adoption requests.
+
+Administrator: Monitors listings and manages system integrity.
+
+External Map Service: Provides user location data.
+
+Notification Service: Sends email and SMS notifications.
+
+3. USE CASE SCENARIOS
+USE CASE: View Nearby Animals
+
+Actor: User
+
+Preconditions:
+
+- User is on the main page.
+
+- Location service is available.
+
+ 
+
+Main Flow:
+
+1. User selects View Animal Posts.
+
+2. System displays all active posts.
+
+3. User selects View Nearby Animals.
+
+4. System requests location permission.
+
+5. User grants permission.
+
+6. System retrieves location from Map Service.
+
+7. System filters posts by distance.
+
+8. System displays nearby animals.
+
+ 
+
+Postconditions:
+
+- Nearby animals are displayed correctly.
+
+ 
+
+USE CASE: Send Adoption Request
+
+Actor: User
+
+Preconditions:
+
+- User is logged in.
+
+- Selected post is active.
+
+ 
+
+Main Flow:
+
+1. User opens animal post.
+
+2. User clicks Adopt This Pet.
+
+3. System displays request form.
+
+4. User submits request.
+
+5. System validates data.
+
+6. System saves request as Pending.
+
+7. System notifies Shelter.
+
+ 
+
+Postconditions:
+
+- Request saved and visible to Shelter.
+
+ 
+
+4. SEQUENCE DIAGRAMS – EXPLANATION
+Sequence Diagram: View Nearby Animals
+
+- User requests animal posts.
+
+- System requests location permission.
+
+- Map Service returns coordinates.
+
+- System filters and displays nearby animals.
+
+ 
+
+Sequence Diagram: Send Adoption Request
+
+- User selects animal post.
+
+- System verifies login.
+
+- User submits adoption request.
+
+- System saves request.
+
+- Notification Service alerts Shelter.
+
+ 
+
+Sequence Diagram: Approve or Reject Request
+
+- Shelter reviews adoption requests.
+
+- Shelter approves or rejects request.
+
+- System updates request status.
+
+- Notification Service notifies User.
+
+ 
+
+5. SEQUENCE DIAGRAMS – PLANTUML CODE
+@startuml
+
+actor User
+
+participant System
+
+participant MapService
+
+ 
+
+User -> System: View Animal Posts
+
+System -> User: Request Location
+
+User -> System: Grant Permission
+
+System -> MapService: Get Location
+
+MapService --> System: Coordinates
+
+System -> User: Display Nearby Animals
+
+@enduml
+
+ 
+
+ 
+
+@startuml
+
+actor User
+
+participant System
+
+participant NotificationService
+
+ 
+
+User -> System: Open Animal Post
+
+User -> System: Submit Adoption Request
+
+System -> System: Save Request (Pending)
+
+System -> NotificationService: Notify Shelter
+
+@enduml
+
+ 
+
+ 
+
+@startuml
+
+actor Shelter
+
+participant System
+
+participant NotificationService
+
+actor User
+
+ 
+
+Shelter -> System: Review Requests
+
+Shelter -> System: Approve/Reject
+
+System -> NotificationService: Notify User
+
+@enduml
